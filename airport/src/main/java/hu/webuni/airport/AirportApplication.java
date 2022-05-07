@@ -12,10 +12,11 @@ public class AirportApplication implements CommandLineRunner{
 
 	@Autowired
 	PriceService priceService;
-	
+	//
 	public static void main(String[] args) {
 		SpringApplication.run(AirportApplication.class, args);
 	}
+
 
 	@Override
 	public void run(String... args) throws Exception {
