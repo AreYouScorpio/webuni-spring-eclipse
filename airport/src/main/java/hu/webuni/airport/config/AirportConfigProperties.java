@@ -13,6 +13,7 @@ public class AirportConfigProperties {
         return discount;
     }
 
+
     public void setDiscount(Discount discount) {
         this.discount = discount;
     }
