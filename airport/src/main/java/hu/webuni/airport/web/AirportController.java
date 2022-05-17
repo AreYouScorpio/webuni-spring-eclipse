@@ -1,9 +1,8 @@
 package hu.webuni.airport.web;
 
 import hu.webuni.airport.dto.AirportDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +23,38 @@ public class AirportController {
     @GetMapping
     public List<AirportDto> getAll(){
         return new ArrayList<>(airports.values());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AirportDto> getById(@PathVariable long id){
+        AirportDto airportDto = airports.get(id);
+        if (airportDto!=null)
+            return ResponseEntity.ok(airportDto);
+        else
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public AirportDto createAirport(@RequestBody AirportDto airportDto) {
+        airports.put(airportDto.getId(), airportDto);
+        return airportDto;
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AirportDto> modifyAirport(@PathVariable long id,
+                                    @RequestBody AirportDto airportDto) {
+        if(!airports.containsKey(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        airportDto.setId(id);
+        airports.put(id, airportDto);
+        return ResponseEntity.ok(airportDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteAirport(@PathVariable long id){
+        airports.remove(id);
     }
 
 }
