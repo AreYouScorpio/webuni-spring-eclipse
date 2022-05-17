@@ -15,7 +15,7 @@
         </li>
     </ul>
 
-<form th:action="@{/airports} method="post" th:object="${newAirport}">
+<form th:action="@{/airports}" method="post" th:object="${newAirport}">
     Id: <input th:field="*{id}" /> <br/>
     Name:<input th:field="*{name}" /> <br/>
     IATA:<input th:field="*{iata}" /> <br/>
