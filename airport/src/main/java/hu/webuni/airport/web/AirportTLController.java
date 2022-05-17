@@ -19,7 +19,6 @@ public class AirportTLController {
     {
         allAirports.add( new AirportDto(1, "Ferenc Liszt Airport", "BUD"));
 
-        System.out.println(allAirports);
     }
 
 

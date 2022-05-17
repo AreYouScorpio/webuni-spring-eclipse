@@ -31,6 +31,7 @@ public class AirportDto {
 
 
     public AirportDto(long id, String name, String iata) {
+        super();
         this.id = id;
         this.name = name;
         this.iata = iata;
