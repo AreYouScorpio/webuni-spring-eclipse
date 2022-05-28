@@ -1,13 +1,13 @@
 package hu.webuni.airport.web;
 
 import hu.webuni.airport.dto.AirportDto;
+import hu.webuni.airport.service.NonUniqueIataException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/airports")
@@ -26,16 +26,20 @@ public class AirportController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AirportDto> getById(@PathVariable long id){
+    public AirportDto getById(@PathVariable long id){
         AirportDto airportDto = airports.get(id);
+//        if (airportDto!=null)
+//            return ResponseEntity.ok(airportDto);
+//        else
+//        return ResponseEntity.notFound().build();
         if (airportDto!=null)
-            return ResponseEntity.ok(airportDto);
-        else
-        return ResponseEntity.notFound().build();
+            return airportDto;
+        else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
     public AirportDto createAirport(@RequestBody AirportDto airportDto) {
+        checkUniqueIata(airportDto.getIata());
         airports.put(airportDto.getId(), airportDto);
         return airportDto;
     }
@@ -47,9 +51,19 @@ public class AirportController {
             return ResponseEntity.notFound().build();
         }
 
+        checkUniqueIata(airportDto.getIata());
         airportDto.setId(id);
         airports.put(id, airportDto);
         return ResponseEntity.ok(airportDto);
+    }
+
+    private void checkUniqueIata(String iata) {
+        Optional<AirportDto> airportWithSameIata = airports.values()
+                .stream()
+                .filter(a -> a.getIata().equals(iata))
+                .findAny();
+        if(airportWithSameIata.isPresent())
+            throw new NonUniqueIataException(iata);
     }
 
     @DeleteMapping("/{id}")

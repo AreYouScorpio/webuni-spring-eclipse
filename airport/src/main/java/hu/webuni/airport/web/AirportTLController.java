@@ -13,7 +13,7 @@ import java.util.Map;
 @Controller
 public class AirportTLController {
 
-    int a;
+    int a; // teszt, kiírjuk hello a=0, hogy frissül-e
 
     private List<AirportDto> allAirports = new ArrayList<>();
     {
@@ -27,8 +27,8 @@ public class AirportTLController {
 
     @GetMapping("/")
     public String home() {
-        System.out.println("hello");
-        System.out.println(a);
+        System.out.println("hello"); // teszt kiírás frissül-e
+        System.out.println(a); // teszt kiírás frissül-e
         return "index";
     }
 
