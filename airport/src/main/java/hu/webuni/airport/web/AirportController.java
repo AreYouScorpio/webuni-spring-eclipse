@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @RestController
@@ -38,7 +39,7 @@ public class AirportController {
     }
 
     @PostMapping
-    public AirportDto createAirport(@RequestBody AirportDto airportDto) {
+    public AirportDto createAirport(@RequestBody @Valid AirportDto airportDto) {
         checkUniqueIata(airportDto.getIata());
         airports.put(airportDto.getId(), airportDto);
         return airportDto;
