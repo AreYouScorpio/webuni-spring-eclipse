@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("prod") // profile switcher: prod off or on (test on or off)
+@ActiveProfiles({"prod", "test"}) // profile switcher: both profiles on
 public class PriceServiceTestIT {
 
     @Autowired
@@ -23,7 +23,7 @@ public class PriceServiceTestIT {
     @Test
     void testGetFinalPrice() throws Exception {
         int newPrice = priceService.getFinalPrice(100);
-        assertThat(newPrice).isEqualTo(95);
+        assertThat(newPrice).isEqualTo(90);
     }
 
 
