@@ -4,6 +4,7 @@ import hu.webuni.airport.dto.AirportDto;
 import hu.webuni.airport.service.NonUniqueIataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -39,7 +40,8 @@ public class AirportController {
     }
 
     @PostMapping
-    public AirportDto createAirport(@RequestBody @Valid AirportDto airportDto) {
+    public AirportDto createAirport(@RequestBody @Valid AirportDto airportDto /*, BindingResult errors */ ) {
+        //if (errors.hasErrors()) throw new ...
         checkUniqueIata(airportDto.getIata());
         airports.put(airportDto.getId(), airportDto);
         return airportDto;
