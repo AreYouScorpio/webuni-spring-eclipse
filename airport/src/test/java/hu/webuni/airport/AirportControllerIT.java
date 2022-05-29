@@ -37,7 +37,7 @@ public class AirportControllerIT {
 
     }
 
-    private void createAirport(AirportDto airportDto) {
+    private void createAirport(AirportDto newAirport) {
         webTestClient
                 .post()
                 .uri(BASE_URI)
@@ -58,7 +58,7 @@ public class AirportControllerIT {
                 .returnResult().getResponseBody();
 
         Collections.sort(responseList, (a1, a2) -> Long.compare(a1.getId(), a2.getId()));
-        
+
         return responseList;
     }
 }
