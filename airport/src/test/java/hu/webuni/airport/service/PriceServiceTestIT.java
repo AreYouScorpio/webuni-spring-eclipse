@@ -27,14 +27,14 @@ public class PriceServiceTestIT {
     }
 
 
-    // prod on
+    // prod on - both profiles on
     @Test
     void testGetFinalPriceWithHighPrice() throws Exception {
         int newPrice = priceService.getFinalPrice(11000);
         assertThat(newPrice).isEqualTo(9350);
     }
 
-    // prod off
+    // prod off - both profiles on
     @Test
     void testGetFinalPriceWithHighPrice2() throws Exception {
         int newPrice = priceService.getFinalPrice(11000);
