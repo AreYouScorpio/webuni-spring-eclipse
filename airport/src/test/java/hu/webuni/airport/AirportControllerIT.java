@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,6 +56,9 @@ public class AirportControllerIT {
                 .isOk()
                 .expectBodyList(AirportDto.class)
                 .returnResult().getResponseBody();
+
+        Collections.sort(responseList, (a1, a2) -> Long.compare(a1.getId(), a2.getId()));
+        
         return responseList;
     }
 }
