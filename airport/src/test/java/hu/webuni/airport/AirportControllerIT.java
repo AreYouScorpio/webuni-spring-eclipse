@@ -31,9 +31,12 @@ public class AirportControllerIT {
         List<AirportDto>  airportsAfter = getAllAirports();
 
         assertThat(airportsAfter.subList(0, airportsBefore.size()))
+                .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyElementsOf(airportsBefore);
 
-        assertThat(airportsAfter.get(airportsAfter.size()-1)).isEqualTo(newAirport);
+        assertThat(airportsAfter.get(airportsAfter.size()-1))
+                .usingRecursiveComparison()
+                .isEqualTo(newAirport);
 
     }
 
