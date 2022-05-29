@@ -28,14 +28,15 @@ public class PriceServiceWithNonProdIT {
     }
 
 
-    // prod on - prod off now
+    // prod on - prod off now == 10% should be okay if settings for "prod" on, 10%
+    // beware other properties file for test
     @Test
     void testGetFinalPriceWithHighPrice() throws Exception {
-        int newPrice = priceService.getFinalPrice(11000);
-        assertThat(newPrice).isEqualTo(9900);
+        int newPrice = priceService.getFinalPrice(9000);
+        assertThat(newPrice).isEqualTo(8100);
     }
 
-    // prod off
+    // prod off / test on 8800 - 20% should be okay if settings for "test" on (prod off)
     @Test
     void testGetFinalPriceWithHighPrice2() throws Exception {
         int newPrice = priceService.getFinalPrice(11000);
