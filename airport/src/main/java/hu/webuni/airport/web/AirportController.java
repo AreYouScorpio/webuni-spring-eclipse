@@ -58,6 +58,11 @@ public class AirportController {
         return airportMapper.airportToDto(airport);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteAirport(@PathVariable long id) {
+        airportService.delete(id);
+    }
+
     /*
 
     @PutMapping("/{id}")
@@ -75,10 +80,7 @@ public class AirportController {
 
 
 
-    @DeleteMapping("/{id}")
-    public void deleteAirport(@PathVariable long id) {
-        airports.remove(id);
-    }
+
 
     */
 

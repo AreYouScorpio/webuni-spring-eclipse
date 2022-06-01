@@ -34,6 +34,7 @@ public class AirportService {
     public List<Airport> findAll() {
         return new ArrayList<>(airports.values());
     }
+
     public Airport findById(long id) {
         return airports.get(id);
     }
