@@ -77,12 +77,28 @@ public class AirportController {
         airports.put(id, airportDto);
         return ResponseEntity.ok(airportDto);
     }
-
-
-
-
+new PutMapping after MapStruct added:
+---->
 
     */
+
+    @PutMapping("/{id}")
+    public AirportDto modifyAirport(@PathVariable long id,
+                                                    @RequestBody @Valid AirportDto airportDto) {
+
+        Airport airport = airportService.findById(id);
+
+
+        if (airport != null)
+            airportService.update(id, airportMapper.dtoToAirport(airportDto));
+        else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+
+        return airportMapper.airportToDto(airport);
+
+
+    }
+
 
 
 }

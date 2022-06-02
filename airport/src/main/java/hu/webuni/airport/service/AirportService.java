@@ -22,6 +22,11 @@ public class AirportService {
         return airport;
     }
 
+    public Airport update(long id, Airport airport){
+        airports.put(id, airport);
+        return airport;
+    }
+
     private void checkUniqueIata(String iata) {
         Optional<Airport> airportWithSameIata = airports.values()
                 .stream()
