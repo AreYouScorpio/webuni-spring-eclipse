@@ -6,6 +6,7 @@ import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.service.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -63,6 +64,7 @@ public class AirportController {
         airportService.delete(id);
     }
 
+
     /*
 
     @PutMapping("/{id}")
@@ -82,6 +84,8 @@ new PutMapping after MapStruct added:
 
     */
 
+    /* saját mego:
+
     @PutMapping("/{id}")
     public AirportDto modifyAirport(@PathVariable long id,
                                                     @RequestBody @Valid AirportDto airportDto) {
@@ -98,6 +102,27 @@ new PutMapping after MapStruct added:
 
 
     }
+
+
+
+     */
+
+
+    // ---> ehelyett tanári megoldás, de enyém is működött ---->
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AirportDto> modifyAirport(@PathVariable long id,
+                                                    @RequestBody AirportDto airportDto) {
+
+        Airport airport = airportMapper.dtoToAirport(airportDto);
+        airport.setId(id); // hogy tudjunk módosítani azonos iata-jút a uniqecheck ellenére
+        AirportDto savedAirportDto = airportMapper.airportToDto(airportService.update(airport));
+        return ResponseEntity.ok(savedAirportDto);
+    }
+
+
+
 
 
 
