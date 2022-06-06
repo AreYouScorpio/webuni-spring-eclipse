@@ -2,13 +2,16 @@ package hu.webuni.airport.service;
 
 import hu.webuni.airport.dto.AirportDto;
 import hu.webuni.airport.model.Airport;
+import hu.webuni.airport.model.Flight;
 import hu.webuni.airport.repository.AirportRepository;
+import hu.webuni.airport.repository.FlightRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -16,11 +19,13 @@ public class AirportService {
 
     // Spring Data injection
     AirportRepository airportRepository;
+    FlightRepository flightRepository;
 
     // Spring Data injection, @Autowired would be also okay but now constructor injection generate:
 
-    public AirportService(AirportRepository airportRepository) {
+    public AirportService(AirportRepository airportRepository, FlightRepository flightRepository) {
         this.airportRepository = airportRepository;
+        this.flightRepository = flightRepository;
     }
 
 
@@ -110,4 +115,15 @@ public class AirportService {
         // airports.remove(id);
         airportRepository.deleteById(id);
     }
+
+    @Transactional
+    public void createFlight() {
+        Flight flight = new Flight();
+        flight.setFlightNumber("djskjds");
+        flight.setTakeoff(airportRepository.findById(1L).get());
+        flight.setLanding(airportRepository.findById(5L).get());
+        flight.setTakeoffTime(LocalDateTime.of(2021,4,10, 10,0,0));
+        flightRepository.save(flight);
+    }
+
 }
