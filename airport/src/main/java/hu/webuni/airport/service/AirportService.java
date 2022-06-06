@@ -2,6 +2,7 @@ package hu.webuni.airport.service;
 
 import hu.webuni.airport.dto.AirportDto;
 import hu.webuni.airport.model.Airport;
+import hu.webuni.airport.repository.AirportRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,8 +14,20 @@ import java.util.*;
 @Service
 public class AirportService {
 
-    @PersistenceContext
-    EntityManager em;
+    // Spring Data injection
+    AirportRepository airportRepository;
+
+    // Spring Data injection, @Autowired would be also okay but now constructor injection generate:
+
+    public AirportService(AirportRepository airportRepository) {
+        this.airportRepository = airportRepository;
+    }
+
+
+    // Spring Data miatt meg ez is törölve lett ->
+
+    //@PersistenceContext
+    //EntityManager em;
 
     /* EntityManager miatt törölve:
 
@@ -34,28 +47,33 @@ public class AirportService {
         // EntityManager miatt ehelyett
         // airports.put(airport.getId(), airport);
         // ez lesz:
-        em.persist(airport);
-        return airport;
+        // em.persist(airport);
+        // return airport; ---> Spring data--->
+        return airportRepository.save(airport);
     }
 
     @Transactional
     public Airport update(Airport airport){
         // airports.put(id, airport);
         checkUniqueIata(airport.getIata(), airport.getId());
+        if (airportRepository.existsById(airport.getId()))
         //return airport;
-        return em.merge(airport);
+        //return em.merge(airport); SD--->
+        return airportRepository.save(airport);
+        else throw new NoSuchElementException();
     }
 
     private void checkUniqueIata(String iata, Long id) {
 
-        boolean forUpdate = (id != null);
-        TypedQuery<Long> query = em.createNamedQuery( forUpdate ?
-                        "Airport.countByIataAndIdNotIn" :
-                        "Airport.countByIata", Long.class)
-                .setParameter("iata", iata);
-        if (forUpdate) query.setParameter("id", id);
-        Long count = query
-                .getSingleResult(); // a ", Long.class" helyett jó az is, ha (Long)-ra castoljuk
+        boolean forUpdate = id != null;
+
+        // TypedQuery<Long> query = em.createNamedQuery( forUpdate ?
+        //                "Airport.countByIataAndIdNotIn" :
+        //                "Airport.countByIata", Long.class)
+        //        .setParameter("iata", iata);
+        // if (forUpdate) query.setParameter("id", id);
+        // Long count = query
+        //        .getSingleResult(); // a ", Long.class" helyett jó az is, ha (Long)-ra castoljuk
         /*
         Optional<Airport> airportWithSameIata = airports.values()
                 .stream()
@@ -63,23 +81,33 @@ public class AirportService {
                 .findAny();
         */
         //if (airportWithSameIata.isPresent())
+
+        //---> new -->
+        Long count = forUpdate ?
+                airportRepository.countByIataAndIdNot(iata, id)
+                : airportRepository.countByIata(iata);
+
             if(count>0)
             throw new NonUniqueIataException(iata);
     }
 
     public List<Airport> findAll() {
         // return new ArrayList<>(airports.values());
-        return em.createQuery("SELECT a from Airport a", Airport.class).getResultList();
+        // return em.createQuery("SELECT a from Airport a", Airport.class).getResultList();
+
+        return airportRepository.findAll();
     }
 
-    public Airport findById(long id) {
+    public Optional<Airport> findById(long id) {
         //return airports.get(id);
-        return em.find(Airport.class, id);
+        //return em.find(Airport.class, id);
+        return airportRepository.findById(id);
     }
 
     @Transactional
     public void delete(long id) {
-        em.remove(findById(id));
-        //airports.remove(id);
+        // em.remove(findById(id));
+        // airports.remove(id);
+        airportRepository.deleteById(id);
     }
 }

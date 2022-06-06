@@ -33,17 +33,24 @@ public class AirportController {
 
     @GetMapping("/{id}")
     public AirportDto getById(@PathVariable long id) {
-        Airport airport = airportService.findById(id);
+        Airport airport = airportService.findById(id)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         // deleted after mapper ---> AirportDto airportDto = airports.get(id);
 //        if (airportDto!=null)
 //            return ResponseEntity.ok(airportDto);
 //        else
 //        return ResponseEntity.notFound().build();
+       /* ehelyett is orElseThrow és a return marad
         if (airport != null)
             return airportMapper.airportToDto(airport);
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        */
+        return airportMapper.airportToDto(airport);
+
     }
+
 
     @PostMapping
     public AirportDto createAirport(@RequestBody @Valid AirportDto airportDto /*, BindingResult errors */) {
@@ -117,8 +124,13 @@ new PutMapping after MapStruct added:
 
         Airport airport = airportMapper.dtoToAirport(airportDto);
         airport.setId(id); // hogy tudjunk módosítani azonos iata-jút a uniqecheck ellenére
-        AirportDto savedAirportDto = airportMapper.airportToDto(airportService.update(airport));
-        return ResponseEntity.ok(savedAirportDto);
+        try {
+            AirportDto savedAirportDto = airportMapper.airportToDto(airportService.update(airport));
+            return ResponseEntity.ok(savedAirportDto);
+        }
+        catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
 

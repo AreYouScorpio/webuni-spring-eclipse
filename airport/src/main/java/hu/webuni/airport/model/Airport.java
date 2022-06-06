@@ -4,10 +4,11 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
-@NamedQuery(name = "Airport.countByIata",
-        query = "SELECT COUNT(a.id) from Airport a WHERE a.iata = : iata ")
-@NamedQuery(name = "Airport.countByIataAndIdNotIn",
-        query = "SELECT COUNT(a.id) from Airport a WHERE a.iata = : iata AND a.id!= : id")
+// SpringData .. namedquieries dropped:
+//@NamedQuery(name = "Airport.countByIata",
+//        query = "SELECT COUNT(a.id) from Airport a WHERE a.iata = : iata ")
+//@NamedQuery(name = "Airport.countByIataAndIdNotIn",
+//        query = "SELECT COUNT(a.id) from Airport a WHERE a.iata = : iata AND a.id!= : id")
 public class Airport {
 
     @Id
