@@ -67,7 +67,7 @@ public class AirportController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAirport(@PathVariable long id) {
+    public void deleteEmployee(@PathVariable long id) {
         airportService.delete(id);
     }
 
