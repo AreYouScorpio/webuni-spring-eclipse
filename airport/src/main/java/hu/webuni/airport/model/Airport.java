@@ -17,6 +17,7 @@ public class Airport {
 
     @Size (min = 3, max = 20)
     private String name;
+    @Size (min = 3, max = 3)
     private String iata;
 
     public long getId() {
