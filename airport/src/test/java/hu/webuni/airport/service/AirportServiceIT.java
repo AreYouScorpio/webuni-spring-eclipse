@@ -50,15 +50,14 @@ public class AirportServiceIT {
         // chronounit előtt --- > assertThat(savedFlight.getTakeoffTime()).isEqualTo(dateTime);
         // de eltérhet ahogyan a DB tárolja a dateTime hosszát attól, ahogy itt létrehoztuk, ezért:
 
-        // chroniunit után (ha eltérne a DB és a programban létrehozott dateTime tárolásának hossza)
+        // chronounit után (ha eltérne a DB és a programban létrehozott dateTime tárolásának hossza)
         assertThat(savedFlight.getTakeoffTime())
                 .isCloseTo(dateTime,
                         new TemporalUnitWithinOffset(1, ChronoUnit.MICROS));
 
         // lehetne rövidebben, szebben ugyanezt Assertion-nel:
         assertThat(savedFlight.getTakeoffTime())
-                .isCloseTo(dateTime,
-                        Assertions.within(1, ChronoUnit.MICROS));
+                .isCloseTo(dateTime, Assertions.within(1, ChronoUnit.MICROS));
 
         assertThat(savedFlight.getTakeoff().getId()).isEqualTo(takeoff);
         assertThat(savedFlight.getLanding().getId()).isEqualTo(landing);
