@@ -17,7 +17,7 @@ public class Airport {
 
     @Size (min = 3, max = 20)
     private String name;
-    @Size (min = 3, max = 3)
+    @Size (min = 3, max = 10)
     private String iata;
 
     public long getId() {
@@ -48,6 +48,11 @@ public class Airport {
     public Airport(long id, String name, String iata) {
         super();
         this.id = id;
+        this.name = name;
+        this.iata = iata;
+    }
+
+    public Airport(String name, String iata) {
         this.name = name;
         this.iata = iata;
     }

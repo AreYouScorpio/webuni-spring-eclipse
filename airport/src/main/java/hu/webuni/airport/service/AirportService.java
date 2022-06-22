@@ -1,6 +1,5 @@
 package hu.webuni.airport.service;
 
-import hu.webuni.airport.dto.AirportDto;
 import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.model.Flight;
 import hu.webuni.airport.repository.AirportRepository;
@@ -8,9 +7,6 @@ import hu.webuni.airport.repository.FlightRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -117,13 +113,13 @@ public class AirportService {
     }
 
     @Transactional
-    public void createFlight() {
+    public Flight createFlight(String flightNumber, long takeoffAirportId, long landingAirportId, LocalDateTime takeoffDateTime) {
         Flight flight = new Flight();
-        flight.setFlightNumber("djskjds");
-        flight.setTakeoff(airportRepository.findById(1L).get());
-        flight.setLanding(airportRepository.findById(5L).get());
-        flight.setTakeoffTime(LocalDateTime.of(2021,4,10, 10,0,0));
-        flightRepository.save(flight);
+        flight.setFlightNumber(flightNumber);
+        flight.setTakeoff(airportRepository.findById(takeoffAirportId).get());
+        flight.setLanding(airportRepository.findById(landingAirportId).get());
+        flight.setTakeoffTime(takeoffDateTime);
+        return flightRepository.save(flight);
     }
 
 }
