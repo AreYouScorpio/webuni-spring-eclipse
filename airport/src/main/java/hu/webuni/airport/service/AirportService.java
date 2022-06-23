@@ -7,6 +7,7 @@ import hu.webuni.airport.repository.FlightRepository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -44,7 +45,7 @@ public class AirportService {
      */
 
     @Transactional
-    public Airport save(Airport airport){
+    public Airport save(Airport airport) {
         checkUniqueIata(airport.getIata(), null);
         // EntityManager miatt ehelyett
         // airports.put(airport.getId(), airport);
@@ -55,13 +56,13 @@ public class AirportService {
     }
 
     @Transactional
-    public Airport update(Airport airport){
+    public Airport update(Airport airport) {
         // airports.put(id, airport);
         checkUniqueIata(airport.getIata(), airport.getId());
         if (airportRepository.existsById(airport.getId()))
-        //return airport;
-        //return em.merge(airport); SD--->
-        return airportRepository.save(airport);
+            //return airport;
+            //return em.merge(airport); SD--->
+            return airportRepository.save(airport);
         else throw new NoSuchElementException();
     }
 
@@ -89,7 +90,7 @@ public class AirportService {
                 airportRepository.countByIataAndIdNot(iata, id)
                 : airportRepository.countByIata(iata);
 
-            if(count>0)
+        if (count > 0)
             throw new NonUniqueIataException(iata);
     }
 
@@ -128,15 +129,26 @@ public class AirportService {
         String flightNumber = example.getFlightNumber();
         String takeoffIata = null;
         Airport takeoff = example.getTakeoff();
-        if(takeoff!=null)
+        if (takeoff != null)
             takeoffIata = takeoff.getIata();
         LocalDateTime takeoffTime = example.getTakeoffTime();
 
         Specification<Flight> spec = Specification.where(null); // üres Specification, ami semmire nem szűr
 
-        if(id >0) {
+        if (id > 0) {
             spec = spec.and(FlightSpecifications.hasId(id));
         }
+
+        if (StringUtils.hasText(flightNumber)) // SpringFramework-ös StringUtils
+            spec = spec.and(FlightSpecifications.hasFlightNumber(flightNumber));
+
+
+        if (StringUtils.hasText(takeoffIata)) // SpringFramework-ös StringUtils
+            spec = spec.and(FlightSpecifications.hasTakeoffIata(takeoffIata));
+
+        if (takeoffTime!=null) // SpringFramework-ös StringUtils
+            spec = spec.and(FlightSpecifications.hasTakeoffTime(takeoffTime));
+
 
         return null;
     }
