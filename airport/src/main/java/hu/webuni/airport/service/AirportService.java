@@ -4,6 +4,7 @@ import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.model.Flight;
 import hu.webuni.airport.repository.AirportRepository;
 import hu.webuni.airport.repository.FlightRepository;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,6 +121,24 @@ public class AirportService {
         flight.setLanding(airportRepository.findById(landingAirportId).get());
         flight.setTakeoffTime(takeoffDateTime);
         return flightRepository.save(flight);
+    }
+
+    public List<Flight> findFlightsByExample(Flight example) {
+        long id = example.getId();
+        String flightNumber = example.getFlightNumber();
+        String takeoffIata = null;
+        Airport takeoff = example.getTakeoff();
+        if(takeoff!=null)
+            takeoffIata = takeoff.getIata();
+        LocalDateTime takeoffTime = example.getTakeoffTime();
+
+        Specification<Flight> spec = Specification.where(null); // üres Specification, ami semmire nem szűr
+
+        if(id >0) {
+            spec = spec.and(FlightSpecifications.hasId(id));
+        }
+
+        return null;
     }
 
 }
