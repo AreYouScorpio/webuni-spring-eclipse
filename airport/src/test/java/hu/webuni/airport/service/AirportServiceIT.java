@@ -7,6 +7,7 @@ import hu.webuni.airport.repository.FlightRepository;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.data.TemporalUnitWithinOffset;
 import org.checkerframework.checker.units.qual.A;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -33,10 +34,16 @@ public class AirportServiceIT {
     @Autowired
     FlightRepository flightRepository;
 
+    @BeforeEach
+    public void init() {
+        //airportRepository.deleteAll();
+        flightRepository.deleteAll();
+
+    }
 
     @Test
     void testCreateFlight() throws Exception {
-        String flightNumber = "AAA";
+        String flightNumber = "ABC";
         //csak hogy legyen az adatbázisban vmi:
         long takeoff = createAirport("airport1", "iata1");
         long landing = createAirport("airport2", "iata2");
