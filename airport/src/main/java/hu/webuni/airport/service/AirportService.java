@@ -77,14 +77,14 @@ public class AirportService {
                     airport.getId(),
                     airport.getName()));
 
-            callBackendSystem();
+            callBackendSystem(); // mesterséges hiba generátor
             return airportRepository.save(airport);
         } else
             throw new NoSuchElementException();
     }
 
     private void callBackendSystem() {
-        if(new Random().nextInt(4) == 1) throw new RuntimeException();
+        if (new Random().nextInt(4) == 1) throw new RuntimeException();
     }
 
     private void checkUniqueIata(String iata, Long id) {
