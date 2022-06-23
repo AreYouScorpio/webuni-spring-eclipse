@@ -4,6 +4,7 @@ import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.model.Flight;
 import hu.webuni.airport.repository.AirportRepository;
 import hu.webuni.airport.repository.FlightRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -150,7 +151,7 @@ public class AirportService {
             spec = spec.and(FlightSpecifications.hasTakeoffTime(takeoffTime));
 
 
-        return null;
+        return flightRepository.findAll(spec, Sort.by("id"));
     }
 
 }

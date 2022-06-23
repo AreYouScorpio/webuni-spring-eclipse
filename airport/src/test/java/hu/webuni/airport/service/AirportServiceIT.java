@@ -6,17 +6,17 @@ import hu.webuni.airport.repository.AirportRepository;
 import hu.webuni.airport.repository.FlightRepository;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.data.TemporalUnitWithinOffset;
-import org.checkerframework.checker.nullness.Opt;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.lang.management.OperatingSystemMXBean;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,12 +38,22 @@ public class AirportServiceIT {
     void testCreateFlight() throws Exception {
         String flightNumber = "AAA";
         //csak hogy legyen az adatbázisban vmi:
-        long takeoff = airportRepository.save(new Airport("airport1", "iata1")).getId();
-        long landing = airportRepository.save(new Airport("airport2", "iata2")).getId();
+        long takeoff = createAirport("airport1", "iata1");
+        long landing = createAirport("airport2", "iata2");
+        // kiszerveztük createAirportba, ezt az eredetit:
+        // long landing = airportRepository.save(new Airport("airport2", "iata2")).getId();
         LocalDateTime dateTime = LocalDateTime.now();
-        Flight flight = airportService.createFlight(flightNumber, takeoff, landing, dateTime);
-
-        Optional<Flight> savedFlightOptional = flightRepository.findById(flight.getId());
+        //ez is kiszervezve
+        // Flight flight = airportService.createFlight(flightNumber, takeoff, landing, dateTime);
+        // így az új:
+        // a teszthez aztán mégis iknább longot adtunk vissza:
+        // ehelyett ... Flight flight = createFlight(flightNumber, takeoff, landing, dateTime);
+        // új:
+        long flightId = createFlight(flightNumber, takeoff, landing, dateTime);
+        // és akkor persze ehelyett is más kell:
+        // Optional<Flight> savedFlightOptional = flightRepository.findById(flight.getId());
+        // új:
+        Optional<Flight> savedFlightOptional = flightRepository.findById(flightId);
         assertThat(savedFlightOptional).isNotEmpty();
         Flight savedFlight = savedFlightOptional.get();
         assertThat(savedFlight.getFlightNumber()).isEqualTo(flightNumber);
@@ -63,6 +73,52 @@ public class AirportServiceIT {
         assertThat(savedFlight.getLanding().getId()).isEqualTo(landing);
     }
 
+    private long createAirport(String name, String iata) {
+        return airportRepository.save(
+                new Airport(name, iata)).getId();
+    }
+
+    @Test
+    void testFindFlightsByExample() throws Exception {
+
+        long airport1Id = createAirport("airport1", "iata1");
+        long airport2Id = createAirport("airport2", "iata2");
+        long airport3Id = createAirport("airport3", "2iata");
+        long airport4Id = createAirport("airport4", "3ata4");
+
+        LocalDateTime takeoff = LocalDateTime.of(
+                2021, 4 , 23, 8, 0, 0);
+
+        long flight1 = createFlight("ABC123", airport1Id, airport3Id, takeoff);
+        long flight2 = createFlight("ABC1234", airport2Id, airport3Id, takeoff.plusHours(2));
+        createFlight("BC123", airport1Id, airport3Id, takeoff);
+        createFlight("ABC123", airport1Id, airport3Id, takeoff.plusDays(1));
+        createFlight("ABC123", airport3Id, airport3Id, takeoff);
+
+        Flight example = new Flight();
+        example.setFlightNumber("ABC123");
+        example.setTakeoffTime(takeoff);
+        example.setTakeoff(new Airport("sasa", "iata"));
+
+        List<Flight> foundFlights =
+            this.airportService.findFlightsByExample(example);
+
+        assertThat(foundFlights.stream()
+                .map(Flight::getId)
+                .collect(Collectors.toList()))
+                .containsExactly(flight1, flight2);
+
+    }
+
+    private long createFlight
+            (String flightNumber, long takeoff, long landing, LocalDateTime dateTime) {
+        return airportService.createFlight(
+                flightNumber,
+                takeoff,
+                landing,
+                dateTime).getId();
+
+    }
 
 
 }
