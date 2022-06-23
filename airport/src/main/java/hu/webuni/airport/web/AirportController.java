@@ -3,7 +3,10 @@ package hu.webuni.airport.web;
 import hu.webuni.airport.dto.AirportDto;
 import hu.webuni.airport.mapper.AirportMapper;
 import hu.webuni.airport.model.Airport;
+import hu.webuni.airport.model.LogEntry;
+import hu.webuni.airport.repository.LogEntryRepository;
 import hu.webuni.airport.service.AirportService;
+import hu.webuni.airport.service.LogEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,9 @@ public class AirportController {
 
     @Autowired
     AirportMapper airportMapper;
+
+    //@Autowired
+    //LogEntryService logEntryService;
 
     @GetMapping
     public List<AirportDto> getAll() {
@@ -126,6 +132,12 @@ new PutMapping after MapStruct added:
         airport.setId(id); // hogy tudjunk módosítani azonos iata-jút a uniqecheck ellenére
         try {
             AirportDto savedAirportDto = airportMapper.airportToDto(airportService.update(airport));
+
+            // LogEntryRepository.save(new LogEntry("Airport modified with id " + id)); -- service hozzáadva
+            // logEntryService.createLog("Airport modified with id " + id); -inkább a service update legyen felelős érte, h a logot lementse
+            // a service autowired-et is lehet így innét törölni, átvinni AirportService-be
+
+
             return ResponseEntity.ok(savedAirportDto);
         }
         catch (NoSuchElementException e) {

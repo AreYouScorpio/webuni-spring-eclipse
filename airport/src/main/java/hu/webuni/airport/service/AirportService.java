@@ -4,12 +4,14 @@ import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.model.Flight;
 import hu.webuni.airport.repository.AirportRepository;
 import hu.webuni.airport.repository.FlightRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Access;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -19,13 +21,20 @@ public class AirportService {
     // Spring Data injection
     AirportRepository airportRepository;
     FlightRepository flightRepository;
+    LogEntryService logEntryService; // ide hoztuk át a controllerből,de nem autowired, hanem új constructorral a háromra
 
-    // Spring Data injection, @Autowired would be also okay but now constructor injection generate:
-
-    public AirportService(AirportRepository airportRepository, FlightRepository flightRepository) {
+    public AirportService(AirportRepository airportRepository, FlightRepository flightRepository, LogEntryService logEntryService) {
         this.airportRepository = airportRepository;
         this.flightRepository = flightRepository;
+        this.logEntryService = logEntryService;
     }
+// Spring Data injection, @Autowired would be also okay but now constructor injection generate:
+
+    //már 3 van, új konstruktor:
+    //public AirportService(AirportRepository airportRepository, FlightRepository flightRepository) {
+    //    this.airportRepository = airportRepository;
+    //    this.flightRepository = flightRepository;
+    //}
 
 
     // Spring Data miatt meg ez is törölve lett ->
@@ -60,11 +69,22 @@ public class AirportService {
     public Airport update(Airport airport) {
         // airports.put(id, airport);
         checkUniqueIata(airport.getIata(), airport.getId());
-        if (airportRepository.existsById(airport.getId()))
+        if (airportRepository.existsById(airport.getId())) {
             //return airport;
             //return em.merge(airport); SD--->
+
+            logEntryService.createLog(String.format("Airport modified with id %d new name is %s",
+                    airport.getId(),
+                    airport.getName()));
+
+            callBackendSystem();
             return airportRepository.save(airport);
-        else throw new NoSuchElementException();
+        } else
+            throw new NoSuchElementException();
+    }
+
+    private void callBackendSystem() {
+        if(new Random().nextInt(4) == 1) throw new RuntimeException();
     }
 
     private void checkUniqueIata(String iata, Long id) {
@@ -147,7 +167,7 @@ public class AirportService {
         if (StringUtils.hasText(takeoffIata)) // SpringFramework-ös StringUtils
             spec = spec.and(FlightSpecifications.hasTakeoffIata(takeoffIata));
 
-        if (takeoffTime!=null) // SpringFramework-ös StringUtils
+        if (takeoffTime != null) // SpringFramework-ös StringUtils
             spec = spec.and(FlightSpecifications.hasTakeoffTime(takeoffTime));
 
 
