@@ -1,9 +1,11 @@
 package hu.webuni.airport.config;
 
+import hu.webuni.airport.security.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserDetailsService userDetailsService;
+
+    @Autowired
+    JwtAuthFilter jwtAuthFilter;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -59,26 +66,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-                .httpBasic()
-                .and()
+                //   .httpBasic()    --- offoltuk, ha jwt token van, ne lehessen basic-kel belépni már
+                // .and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //itt lehet átállítani sessiont, így minden kérésben mennie kell username password párosnak
                 .and()
                 .authorizeRequests()
+                .antMatchers("/api/login/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/airports/**").hasAuthority("admin")
                 .antMatchers(HttpMethod.PUT, "/api/airports/**").hasAnyAuthority("user", "admin")
                 //ha nem akarom különválasztani post get stb szabályokat: .antMatchers("/api/airports/**")
                 .anyRequest().authenticated();
         // törölni: super.configure(http);
+
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // kell hozzá autowired JwtAuthFilter jwtAuthFilter fent, a UsernamePasswordAuthenticationFilter elé akarom berakni ezt a filteremet
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
 
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         daoAuthenticationProvider.setUserDetailsService(userDetailsService); // ehhez injektálni userDetailsService-t
         return daoAuthenticationProvider;
-    };
+    }
+
+    ;
+
+    @Override
+    @Bean // ezzel kipublikálom az alkalmazásom többi részének, h használhassák
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 }
