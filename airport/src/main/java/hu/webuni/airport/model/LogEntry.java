@@ -14,12 +14,14 @@ public class LogEntry {
 
     private LocalDateTime ts;
     private String description;
+    private String username;
 
     public LogEntry() {
     }
 
-    public LogEntry(String description) {
+    public LogEntry(String description, String username) {
         this.description = description;
+        this.username = username;
         this.ts = LocalDateTime.now();
     }
 

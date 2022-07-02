@@ -10,6 +10,7 @@ import hu.webuni.airport.service.LogEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -125,6 +126,7 @@ new PutMapping after MapStruct added:
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin')") //ez csak akkor értékelődik ki, ha a SecurityConfigban megkérem @EnableGlobalMethodSecurityben
     public ResponseEntity<AirportDto> modifyAirport(@PathVariable long id,
                                                     @RequestBody AirportDto airportDto) {
 
