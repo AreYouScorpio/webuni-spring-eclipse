@@ -1,17 +1,30 @@
 package hu.webuni.airport.model;
 
+import lombok.*;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Flight {
 
+
     @Id
     @GeneratedValue
+    @EqualsAndHashCode.Include
     private long id;
+
+
+    private String flightNumber;
+    private LocalDateTime takeoffTime;
 
     @ManyToOne
     private Airport takeoff;
@@ -19,8 +32,8 @@ public class Flight {
     @ManyToOne
     private Airport landing;
 
-    private String flightNumber;
-    private LocalDateTime takeoffTime;
+
+
 
     public long getId() {
         return id;
@@ -60,5 +73,17 @@ public class Flight {
 
     public void setTakeoffTime(LocalDateTime takeoffTime) {
         this.takeoffTime = takeoffTime;
+    }
+
+
+    public Flight(long id, String flightNumber, LocalDateTime takeoffTime, Airport takeoff, Airport landing) {
+        this.id = id;
+        this.flightNumber = flightNumber;
+        this.takeoffTime = takeoffTime;
+        this.takeoff = takeoff;
+        this.landing = landing;
+    }
+
+    public Flight() {
     }
 }

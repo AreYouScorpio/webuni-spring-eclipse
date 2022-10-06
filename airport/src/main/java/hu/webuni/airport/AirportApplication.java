@@ -1,6 +1,7 @@
 package hu.webuni.airport;
 
 import hu.webuni.airport.service.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -8,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.springframework.context.annotation.Bean;
 
+@RequiredArgsConstructor
 @SpringBootApplication
 public class AirportApplication implements CommandLineRunner{
 
@@ -32,6 +34,8 @@ public class AirportApplication implements CommandLineRunner{
 		System.out.println(priceService.getFinalPrice(20000));
 
 		initDbService.createUsersIfNeeded();
+
+		initDbService.addInitData();
 	}
 
 

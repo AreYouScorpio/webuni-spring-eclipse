@@ -1,8 +1,16 @@
 package hu.webuni.airport.model;
 
+import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 // SpringData .. namedquieries dropped:
 //@NamedQuery(name = "Airport.countByIata",
@@ -13,12 +21,15 @@ public class Airport {
 
     @Id
     @GeneratedValue // (strategy = GenerationType.AUTO)
+    @EqualsAndHashCode.Include()
     private long id;
 
     @Size (min = 3, max = 20)
     private String name;
-    @Size (min = 3, max = 10)
+    //@Size (min = 3, max = 10)
     private String iata;
+
+
 
     public long getId() {
         return id;
@@ -52,12 +63,16 @@ public class Airport {
         this.iata = iata;
     }
 
+
+
     public Airport(String name, String iata) {
         this.name = name;
         this.iata = iata;
     }
 
+
     public Airport() {
     }
+
 
 }

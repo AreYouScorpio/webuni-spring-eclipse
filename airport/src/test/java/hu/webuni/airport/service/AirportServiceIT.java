@@ -115,6 +115,11 @@ public class AirportServiceIT {
                 .collect(Collectors.toList()))
                 .containsExactly(flight1, flight2);
 
+        System.out.println("Results (flightNo): " + foundFlights.stream()
+                        .map(Flight::getFlightNumber)
+                        .collect(Collectors.toList()))
+                ;
+
     }
 
     private long createFlight
