@@ -73,6 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/login/**").permitAll()
+                .antMatchers("/**").permitAll() //security kikapcsolása minden rest apira . ha nem kell, ezt a sort törölni
                 .antMatchers(HttpMethod.POST, "/api/airports/**").hasAuthority("admin")
                 .antMatchers(HttpMethod.PUT, "/api/airports/**").hasAnyAuthority("user", "admin")
                 //ha nem akarom különválasztani post get stb szabályokat: .antMatchers("/api/airports/**")

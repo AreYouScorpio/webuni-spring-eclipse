@@ -7,8 +7,8 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
