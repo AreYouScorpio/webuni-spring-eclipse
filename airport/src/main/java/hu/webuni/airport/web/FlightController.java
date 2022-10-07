@@ -50,7 +50,7 @@ public class FlightController {
 
 
 
-        return flightMapper.flightsToDtos(flightRepository.findAll(predicate, Pageable.unpaged()));
+        return flightMapper.flightsToDtos(flightRepository.findAll(predicate));
     }
 
 }
