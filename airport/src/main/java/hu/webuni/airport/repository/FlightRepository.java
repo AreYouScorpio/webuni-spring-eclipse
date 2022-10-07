@@ -11,6 +11,7 @@ public interface FlightRepository extends
         JpaSpecificationExecutor<Flight>,
         QuerydslPredicateExecutor<Flight> {
 
+
     //QueryDSL 2. course-hoz ezt is hozzá kell adni, h Predicate is átadható legyen, az AirportService-ben (korábbi FlightSpecben )
 
 }

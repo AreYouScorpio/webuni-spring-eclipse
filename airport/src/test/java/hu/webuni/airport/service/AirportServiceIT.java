@@ -110,15 +110,15 @@ public class AirportServiceIT {
         List<Flight> foundFlights =
             this.airportService.findFlightsByExample(example);
 
+
+        System.out.println("Results (flightNo): " + foundFlights.stream()
+                .map(Flight::getFlightNumber)
+                .collect(Collectors.toList()));
+
         assertThat(foundFlights.stream()
                 .map(Flight::getId)
                 .collect(Collectors.toList()))
                 .containsExactly(flight1, flight2);
-
-        System.out.println("Results (flightNo): " + foundFlights.stream()
-                        .map(Flight::getFlightNumber)
-                        .collect(Collectors.toList()))
-                ;
 
     }
 
