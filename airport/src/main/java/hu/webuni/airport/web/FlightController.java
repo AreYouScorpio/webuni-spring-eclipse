@@ -49,7 +49,6 @@ public class FlightController {
     public List<FlightDto> searchFlights2(@QuerydslPredicate(root = Flight.class) Predicate predicate){
 
 
-
         return flightMapper.flightsToDtos(flightRepository.findAll(predicate));
     }
 
