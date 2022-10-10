@@ -4,6 +4,7 @@ package hu.webuni.airport.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
@@ -31,10 +32,16 @@ public class Airport {
     private String name;
     private String iata;
 
+    @ManyToOne
+    private Address address;
+
     public Airport(String name, String iata) {
         this.name = name;
         this.iata = iata;
     }
+
+
+
 }
 
 /* airport old, QueryDsl-lel működött, most váltok tanári lombokos verzióra, próbaképp - 10.10.2022
