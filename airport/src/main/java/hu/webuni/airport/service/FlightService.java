@@ -27,6 +27,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class FlightService {
 
+    // vagy autowired, vagy
+    // 	private final AirportRepository airportRepository;
+    //	private final FlightRepository flightRepository;
+    // injektálás.. konstruktorinjektálás.. lombok.. a @RequiredArgsConstructor a private final esetén
+    // olyan konstruktort fog legenerálni, ami az összes private final tagváltozóját elfogadja argumentumként
+    // ha egy konstruktort talál, annak minden változóját injektálni próbálja
+
     @Autowired
     AirportRepository airportRepository;
     @Autowired
