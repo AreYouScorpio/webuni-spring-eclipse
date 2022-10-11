@@ -1,47 +1,24 @@
 package hu.webuni.airport.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.validation.constraints.Size;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AirportDto {
-    private long id;
 
+    private long id;
     @Size (min = 3, max = 20)
     private String name;
     private String iata;
 
-    public long getId() {
-        return id;
-    }
+    private AddressDto address;
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getIata() {
-        return iata;
-    }
-
-    public void setIata(String iata) {
-        this.iata = iata;
-    }
-
-
-    public AirportDto(long id, String name, String iata) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.iata = iata;
-    }
-
-    public AirportDto() {
-    }
 
 }
