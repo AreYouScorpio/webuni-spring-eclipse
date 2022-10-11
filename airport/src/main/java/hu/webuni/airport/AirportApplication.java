@@ -38,6 +38,7 @@ public class AirportApplication implements CommandLineRunner{
 
 //		initDbService.createUsersIfNeeded();
 
+		initDbService.deleteDb();
 		initDbService.addInitData();
 	}
 

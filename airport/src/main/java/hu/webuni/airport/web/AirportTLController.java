@@ -1,5 +1,6 @@
 package hu.webuni.airport.web;
 
+import hu.webuni.airport.dto.AddressDto;
 import hu.webuni.airport.dto.AirportDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ public class AirportTLController {
 
     private List<AirportDto> allAirports = new ArrayList<>();
     {
-        allAirports.add( new AirportDto(1, "Ferenc Liszt Airport", "BUD"));
+        allAirports.add( new AirportDto(1, "Ferenc Liszt Airport", "BUD", new AddressDto(1, "Nyul", "Iskola", "9082")));
 
     }
 

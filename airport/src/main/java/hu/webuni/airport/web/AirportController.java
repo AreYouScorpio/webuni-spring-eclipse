@@ -4,6 +4,7 @@ import hu.webuni.airport.dto.AirportDto;
 import hu.webuni.airport.mapper.AirportMapper;
 import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.model.LogEntry;
+import hu.webuni.airport.repository.AirportRepository;
 import hu.webuni.airport.repository.LogEntryRepository;
 import hu.webuni.airport.service.AirportService;
 import hu.webuni.airport.service.LogEntryService;
@@ -29,12 +30,22 @@ public class AirportController {
     @Autowired
     AirportMapper airportMapper;
 
+    @Autowired
+    AirportRepository airportRepository;
+
     //@Autowired
     //LogEntryService logEntryService;
 
     @GetMapping
     public List<AirportDto> getAll() {
-        return airportMapper.airportsToDtos(airportService.findAll());
+        // eredetileg ennyi: return airportMapper.airportsToDtos(airportService.findAll());
+        // de most kíváncsiak vagyunk, mi toltodik be mar automatikusan DB-bol
+        //List<Airport> airports = airportService.findAll(); //--> ehelyett meg a repobol mar az uj lekerest hivjuk meg es nem a service-bol, igy gyorsabb, ugyis csak athivna
+        List<Airport> airports = airportRepository.findAllWithAddress();
+        // es mi akkor kenyszerul betoltodni, amikor a mapstruct mar a gettereket hivogatja:
+        return airportMapper.airportsToDtos(airports);
+
+
     }
 
 

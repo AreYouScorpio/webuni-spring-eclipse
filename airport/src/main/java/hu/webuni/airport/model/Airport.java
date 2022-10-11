@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
 
 @Getter
 @Setter
@@ -33,6 +34,7 @@ public class Airport {
     private String iata;
 
     @ManyToOne
+    //@Fetch() .. lehetne SELECT, de az uaz lenne mint alapbol. JOIN nem lenne hatasa, m csak ID alapjan torteno keresesnel hat, SUBSELECT meg toOne esetben teljesen invalid xD .. ezerta AirportRepositorynal irjuk meg
     private Address address;
 
     public Airport(String name, String iata) {

@@ -19,6 +19,4 @@ public class AirportDto {
     private AddressDto address;
 
 
-
-
 }
