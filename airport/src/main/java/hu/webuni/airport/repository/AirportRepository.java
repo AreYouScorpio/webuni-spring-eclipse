@@ -43,4 +43,16 @@ public interface AirportRepository extends JpaRepository<Airport, Long> {
     @Query("SELECT a FROM Airport a")
     List<Airport> findAllWithArrivals(Pageable pageable);
 
+    @EntityGraph(attributePaths = {"address"})
+    @Query("SELECT a FROM Airport a")
+    List<Airport> findAllWithAddress(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"arrivals"})
+    @Query("SELECT a FROM Airport a WHERE a.id IN :ids")
+    List<Airport> findByIdWithArrivals(List<Long> ids);
+
+    @EntityGraph(attributePaths = {"departures"})
+    @Query("SELECT a FROM Airport a WHERE a.id IN :ids")
+    List<Airport> findByIdWithDepartures(List<Long> ids);
+
 }

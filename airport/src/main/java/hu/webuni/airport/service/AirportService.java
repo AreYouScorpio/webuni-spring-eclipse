@@ -231,10 +231,27 @@ public class AirportService {
         return Lists.newArrayList(flightRepository.findAll(ExpressionUtils.allOf(predicates)));
     }
 
+
+    /* ez in memory lapozas,minden sor bejon a DB-bol:
     @Transactional // ha transactional akk nem kell atmasolgatni egyiket a masikba a ket listanal, elintez helyettunk mindent a hybernate az egy kozos perzisztencia kontextus miatt
     public List<Airport> findaAllWithRelationships(Pageable pageable) {
         List<Airport> airports = airportRepository.findAllWithAddressAndDepartures(pageable);
         airports = airportRepository.findAllWithArrivals(pageable);
         return airports; // igy nem 100x100 jon be, igaz nem egy, hanem 2 queryvel, de igy csak 100+100 jon vissza
     }
+     */
+
+    @Transactional // ha transactional akk nem kell atmasolgatni egyiket a masikba a ket listanal, elintez helyettunk mindent a hybernate az egy kozos perzisztencia kontextus miatt
+    public List<Airport> findaAllWithRelationships(Pageable pageable) {
+        List<Airport> airports = airportRepository.findAllWithAddressAndDepartures(pageable);
+        airports = airportRepository.findAllWithAddress(pageable);
+        List<Long> airportIds = airports.stream().map(Airport::getId).toList();
+
+        airports = airportRepository.findByIdWithArrivals(airportIds);
+        airports = airportRepository.findByIdWithDepartures(airportIds);
+
+        return airports; // igy nem 100x100 jon be, igaz nem egy, hanem 2 queryvel, de igy csak 100+100 jon vissza
+    }
+
+
 }
