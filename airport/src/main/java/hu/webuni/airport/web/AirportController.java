@@ -3,11 +3,8 @@ package hu.webuni.airport.web;
 import hu.webuni.airport.dto.AirportDto;
 import hu.webuni.airport.mapper.AirportMapper;
 import hu.webuni.airport.model.Airport;
-import hu.webuni.airport.model.LogEntry;
 import hu.webuni.airport.repository.AirportRepository;
-import hu.webuni.airport.repository.LogEntryRepository;
 import hu.webuni.airport.service.AirportService;
-import hu.webuni.airport.service.LogEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +45,7 @@ public class AirportController {
 
         List<Airport> airports =
                 isFull
-                ? airportRepository.findAllWithAddress()
+                ? airportRepository.findAllWithAddressAndDepartures()
                         : airportRepository.findAll(); // ezt atallitjuk lazy-re Airportban - @ManyToOne(fetch=FetchType.LAZY)
 
 
