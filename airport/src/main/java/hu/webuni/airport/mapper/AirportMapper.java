@@ -26,6 +26,7 @@ import java.util.List;
         @Named("summary")
         @Mapping(target = "address", ignore = true) // address lazy esetben ha address-t probalna kitolteni, ignore = true legyen.. ez csak a summary mapper
         @Mapping(target = "departures", ignore = true)
+        @Mapping(target = "arrivals", ignore = true)
         AirportDto airportSummaryToDto(Airport airport);
 
         Airport dtoToAirport(AirportDto airportDto);

@@ -230,4 +230,10 @@ public class AirportService {
         return Lists.newArrayList(flightRepository.findAll(ExpressionUtils.allOf(predicates)));
     }
 
+    @Transactional
+    public List<Airport> findaAllWithRelationships() {
+        List<Airport> airports = airportRepository.findAllWithAddressAndDepartures();
+        airports = airportRepository.findAllWithArrivals();
+        return airports; // igy nem 100x100 jon be, igaz nem egy, hanem 2 queryvel, de igy csak 100+100 jon vissza
+    }
 }

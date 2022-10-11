@@ -45,7 +45,9 @@ public class AirportController {
 
         List<Airport> airports =
                 isFull
-                ? airportRepository.findAllWithAddressAndDepartures()
+
+//                ? airportRepository.findAllWithAddressAndDepartures()  // ez N*M sort küldene vissza, ha N arrival es M departure van, ezert inkabb airportservice findallwithrelationshipet irunk
+                    ? airportService.findaAllWithRelationships()
                         : airportRepository.findAll(); // ezt atallitjuk lazy-re Airportban - @ManyToOne(fetch=FetchType.LAZY)
 
 

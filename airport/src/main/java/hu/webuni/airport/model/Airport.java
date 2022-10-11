@@ -14,6 +14,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -40,7 +41,13 @@ public class Airport {
     @OneToMany(mappedBy = "takeoff") //, fetch = FetchType.EAGER)
     //@Fetch(FetchMode.JOIN) // nem muxik, m csak query-be irva
     //@Fetch(FetchMode.SUBSELECT) // eloszor airportokat keresi es ugyanabban a queryben a subselect meg a flightokat tolti be
-    private List<Flight> departures;
+    //private List<Flight> departures; legyen inkabb set:
+    private Set<Flight> departures;
+
+
+    @OneToMany(mappedBy = "landing")
+    private Set<Flight> arrivals; // ket listat nem hajlando fetch joinolni, emiatt a masodik set kell legyen.. nincs jelentosege h 2 Flight van vagy mas lenne 1 ilyen 1 olyan
+
 
     public Airport(String name, String iata) {
         this.name = name;

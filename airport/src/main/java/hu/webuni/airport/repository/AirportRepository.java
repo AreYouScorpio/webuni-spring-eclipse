@@ -28,10 +28,18 @@ public interface AirportRepository extends JpaRepository<Airport, Long> {
     //es most jon a Prod kornyezetben legszerencsesebb megoldas:
     //igy csak egy SELECT fut le, semmi felesleges JOIN nincs benne full false-nal, full-nal pedig hozza van minden joinolva, ami kell
 
-    @EntityGraph(attributePaths = {"address", "departures"}) //, type = EntityGraph.EntityGraphType.LOAD) //kapcsos kell, m tombot fogad el, most egyelemu tombunk van
+    /*hogy ne jojjon vissza N*M adat, ezt is atirjuk:
+    @EntityGraph(attributePaths = {"address", "departures", "arrivals"}) //, type = EntityGraph.EntityGraphType.LOAD) //kapcsos kell, m tombot fogad el, most egyelemu tombunk van .. fetchelje be az arrivalst is
+    @Query("SELECT a FROM Airport a")
+    List<Airport> findAllWithAddressAndDepartures();
+     */
+
+    @EntityGraph(attributePaths = {"address", "departures"}) // itt egy departure-hoz egy address van, nincs Descartes szorzat//, "arrivals"}) //, type = EntityGraph.EntityGraphType.LOAD) //kapcsos kell, m tombot fogad el, most egyelemu tombunk van .. fetchelje be az arrivalst is
     @Query("SELECT a FROM Airport a")
     List<Airport> findAllWithAddressAndDepartures();
 
-
+    @EntityGraph(attributePaths = {"arrivals"})
+    @Query("SELECT a FROM Airport a")
+    List<Airport> findAllWithArrivals();
 
 }
