@@ -1,14 +1,12 @@
 package hu.webuni.airport.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@Builder // ha van Builder, akk nem kell külön constructor, ha csak egyes attributumokat akarok es jol is lathato
 @AllArgsConstructor
 @NoArgsConstructor
 public class AirportDto {
@@ -19,6 +17,8 @@ public class AirportDto {
     private String iata;
 
     private AddressDto address;
+
+
 
 
 }

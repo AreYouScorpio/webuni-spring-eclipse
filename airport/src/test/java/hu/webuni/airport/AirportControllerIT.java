@@ -25,7 +25,14 @@ public class AirportControllerIT {
     @Test
     void testThatCreatedAirportIsListed() throws Exception {
         List<AirportDto> airportsBefore = getAllAirports();
-        AirportDto newAirport = new AirportDto(5, "jdlksj" , "IGH");
+        //AirportDto newAirport = new AirportDto(5, "jdlksj" , "IGH");
+        //AirportDto @Builder annotacioval keszitve ehelyett:
+        AirportDto newAirport = AirportDto.builder()
+                        .id(5)
+                        .name("jdlksj")
+                        .iata("IGH")
+                        .build();
+
         createAirport(newAirport);
 
         List<AirportDto>  airportsAfter = getAllAirports();
