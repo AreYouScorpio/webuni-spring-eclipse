@@ -13,8 +13,10 @@ public interface AirportRepository extends JpaRepository<Airport, Long> {
 
     //v1: @Query("SELECT a FROM Airport a LEFT JOIN FETCH a.address") // az addresseket is szeretnem betolteni, euert LEFT JOIN..
     //v2: nem querybe irom, hanem entitas grafba, akk ez a ket sor kell a v1 helyett:
-    @EntityGraph(attributePaths = {"address"}) //kapcsos kell, m tombot fogad el, most egyelemu tombunk van
+    @EntityGraph(attributePaths = {"address"}, type = EntityGraph.EntityGraphType.LOAD) //kapcsos kell, m tombot fogad el, most egyelemu tombunk van
     @Query("SELECT a FROM Airport a")
     List<Airport> findAllWithAddress(); // es mst akkor a controllerben ne a findAll-t hivjuk a service-n at, hanem a repositorybol ezt a metodust !
 
+    //fetch graph - szigoruan csak a megnevezett toltodik be, meg akk sem a tobbi, ha eager az entiti graph, ezertkell atirni load graph-ra
+    //type = EntityGraph.EntityGraphType.LOAD .. igy a default eager-ek is benne lesznek, definialas nelkul is
 }

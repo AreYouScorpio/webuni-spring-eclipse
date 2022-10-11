@@ -11,6 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,6 +36,11 @@ public class Airport {
     @ManyToOne(fetch= FetchType.LAZY)
     //@Fetch() .. lehetne SELECT, de az uaz lenne mint alapbol. JOIN nem lenne hatasa, m csak ID alapjan torteno keresesnel hat, SUBSELECT meg toOne esetben teljesen invalid xD .. ezerta AirportRepositorynal irjuk meg
     private Address address;
+
+    @OneToMany(mappedBy = "takeoff", fetch = FetchType.EAGER)
+    //@Fetch(FetchMode.JOIN) // nem muxik, m csak query-be irva
+    @Fetch(FetchMode.SUBSELECT) // eloszor airportokat keresi es ugyanabban a queryben a subselect meg a flightokat tolti be
+    private List<Flight> departures;
 
     public Airport(String name, String iata) {
         this.name = name;

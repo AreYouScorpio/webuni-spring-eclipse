@@ -2,6 +2,7 @@ package hu.webuni.airport.web;
 
 import hu.webuni.airport.dto.AddressDto;
 import hu.webuni.airport.dto.AirportDto;
+import hu.webuni.airport.dto.FlightDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,9 @@ public class AirportTLController {
 
     private List<AirportDto> allAirports = new ArrayList<>();
     {
-        allAirports.add( new AirportDto(1, "Ferenc Liszt Airport", "BUD", new AddressDto(1, "Nyul", "Iskola", "9082")));
+//  temporarly swithed off
+//  mert tesztelgetjuk haladon az entity graph-okat es a konstruktor bovul
+//  allAirports.add( new AirportDto(1, "Ferenc Liszt Airport", "BUD", new AddressDto(1, "Nyul", "Iskola", "9082")));
 
     }
 
