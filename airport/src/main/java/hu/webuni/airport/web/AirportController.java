@@ -37,13 +37,20 @@ public class AirportController {
     //LogEntryService logEntryService;
 
     @GetMapping
-    public List<AirportDto> getAll() {
+    public List<AirportDto> getAll(@RequestParam Optional<Boolean> full) { // szabalyozzuk h az osszeset kerjuk, addresst is
+        boolean isFull = full.orElse(false);
+
         // eredetileg ennyi: return airportMapper.airportsToDtos(airportService.findAll());
         // de most kíváncsiak vagyunk, mi toltodik be mar automatikusan DB-bol
         //List<Airport> airports = airportService.findAll(); //--> ehelyett meg a repobol mar az uj lekerest hivjuk meg es nem a service-bol, igy gyorsabb, ugyis csak athivna
-        List<Airport> airports = airportRepository.findAllWithAddress();
+        List<Airport> airports =
+                isFull
+                ? airportRepository.findAllWithAddress()
+                        : airportRepository.findAll(); // ezt atallitjuk lazy-re Airportban - @ManyToOne(fetch=FetchType.LAZY)
         // es mi akkor kenyszerul betoltodni, amikor a mapstruct mar a gettereket hivogatja:
-        return airportMapper.airportsToDtos(airports);
+        return isFull
+                ? airportMapper.airportsToDtos(airports) // full
+                : airportMapper.airportSummariesToDtos(airports); // "summary" verzio
 
 
     }

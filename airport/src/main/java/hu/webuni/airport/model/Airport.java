@@ -1,10 +1,7 @@
 
 package hu.webuni.airport.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
@@ -33,7 +30,7 @@ public class Airport {
     private String name;
     private String iata;
 
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     //@Fetch() .. lehetne SELECT, de az uaz lenne mint alapbol. JOIN nem lenne hatasa, m csak ID alapjan torteno keresesnel hat, SUBSELECT meg toOne esetben teljesen invalid xD .. ezerta AirportRepositorynal irjuk meg
     private Address address;
 
