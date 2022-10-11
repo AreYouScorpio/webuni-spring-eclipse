@@ -16,8 +16,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-//@AllArgsConstructor
-//@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -41,47 +41,7 @@ public class Airport {
     }
 
 
-    public Airport(long id, String name, String iata, Address address) {
-        this.id = id;
-        this.name = name;
-        this.iata = iata;
-        this.address = address;
-    }
 
-    public Airport() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getIata() {
-        return iata;
-    }
-
-    public void setIata(String iata) {
-        this.iata = iata;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 }
 
 
