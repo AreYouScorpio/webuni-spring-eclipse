@@ -89,6 +89,7 @@ public class FlightService {
         }
 
 
+
         //return flightRepository.findAll(spec, Sort.by("id"));
         return Lists.newArrayList(flightRepository.findAll(ExpressionUtils.allOf(predicates)));
     }

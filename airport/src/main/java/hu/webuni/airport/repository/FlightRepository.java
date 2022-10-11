@@ -52,7 +52,7 @@ public interface FlightRepository extends
             return Optional.ofNullable(path.between(startOfDay, endOfDay));
         });
 
-        }
+    }
 
 
     //QueryDSL 2. course-hoz ezt is hozzá kell adni, h Predicate is átadható legyen, az AirportService-ben (korábbi FlightSpecben )

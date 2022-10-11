@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import hu.webuni.airport.model.QFlight;
 import hu.webuni.airport.repository.FlightRepository;
