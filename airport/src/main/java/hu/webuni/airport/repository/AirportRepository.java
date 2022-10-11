@@ -1,6 +1,7 @@
 package hu.webuni.airport.repository;
 
 import hu.webuni.airport.model.Airport;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,10 +37,10 @@ public interface AirportRepository extends JpaRepository<Airport, Long> {
 
     @EntityGraph(attributePaths = {"address", "departures"}) // itt egy departure-hoz egy address van, nincs Descartes szorzat//, "arrivals"}) //, type = EntityGraph.EntityGraphType.LOAD) //kapcsos kell, m tombot fogad el, most egyelemu tombunk van .. fetchelje be az arrivalst is
     @Query("SELECT a FROM Airport a")
-    List<Airport> findAllWithAddressAndDepartures();
+    List<Airport> findAllWithAddressAndDepartures(Pageable pageable);
 
     @EntityGraph(attributePaths = {"arrivals"})
     @Query("SELECT a FROM Airport a")
-    List<Airport> findAllWithArrivals();
+    List<Airport> findAllWithArrivals(Pageable pageable);
 
 }

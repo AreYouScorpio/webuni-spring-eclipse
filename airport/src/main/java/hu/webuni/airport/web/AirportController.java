@@ -6,6 +6,8 @@ import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.repository.AirportRepository;
 import hu.webuni.airport.service.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,8 @@ public class AirportController {
     //LogEntryService logEntryService;
 
     @GetMapping
-    public List<AirportDto> getAll(@RequestParam Optional<Boolean> full) { // szabalyozzuk h az osszeset kerjuk, addresst is
+    public List<AirportDto> getAll(@RequestParam Optional<Boolean> full,
+                                   @SortDefault("id") Pageable pageable) { // szabalyozzuk h az osszeset kerjuk, addresst is // a sima web vegu kell a SortDefault-bol, nem a masik sortdefault-os, m az oldalaknal nem garantalna semmi, h sorban jon minden, ha nem lenne sorrend, 2x is lehetne uaz
         boolean isFull = full.orElse(false);
 
         // eredetileg ennyi: return airportMapper.airportsToDtos(airportService.findAll());
@@ -47,9 +50,9 @@ public class AirportController {
                 isFull
 
 //                ? airportRepository.findAllWithAddressAndDepartures()  // ez N*M sort küldene vissza, ha N arrival es M departure van, ezert inkabb airportservice findallwithrelationshipet irunk
-                    ? airportService.findaAllWithRelationships()
-                        : airportRepository.findAll(); // ezt atallitjuk lazy-re Airportban - @ManyToOne(fetch=FetchType.LAZY)
-
+                    ? airportService.findaAllWithRelationships(pageable)
+                        : airportRepository.findAll(pageable).getContent(); // ezt atallitjuk lazy-re Airportban - @ManyToOne(fetch=FetchType.LAZY)
+//getContent kell h lista legyen, m a Page of Entity, entitas egy oldalat adna vissza, plusz csomo mas infot, pl hogy hany db van osszesen, stb, ezert kell csak ez a content
 
         // es mi akkor kenyszerul betoltodni, amikor a mapstruct mar a gettereket hivogatja:
 

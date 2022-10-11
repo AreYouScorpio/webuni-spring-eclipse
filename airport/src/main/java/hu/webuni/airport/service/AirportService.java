@@ -9,6 +9,7 @@ import hu.webuni.airport.model.QFlight;
 import hu.webuni.airport.repository.AirportRepository;
 import hu.webuni.airport.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -230,10 +231,10 @@ public class AirportService {
         return Lists.newArrayList(flightRepository.findAll(ExpressionUtils.allOf(predicates)));
     }
 
-    @Transactional
-    public List<Airport> findaAllWithRelationships() {
-        List<Airport> airports = airportRepository.findAllWithAddressAndDepartures();
-        airports = airportRepository.findAllWithArrivals();
+    @Transactional // ha transactional akk nem kell atmasolgatni egyiket a masikba a ket listanal, elintez helyettunk mindent a hybernate az egy kozos perzisztencia kontextus miatt
+    public List<Airport> findaAllWithRelationships(Pageable pageable) {
+        List<Airport> airports = airportRepository.findAllWithAddressAndDepartures(pageable);
+        airports = airportRepository.findAllWithArrivals(pageable);
         return airports; // igy nem 100x100 jon be, igaz nem egy, hanem 2 queryvel, de igy csak 100+100 jon vissza
     }
 }
