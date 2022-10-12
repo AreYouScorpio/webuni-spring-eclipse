@@ -23,6 +23,7 @@ import java.util.Set;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@Cacheable
 public class Airport {
 
     @Id

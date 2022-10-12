@@ -84,8 +84,9 @@ public class AirportController {
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         */
-        return airportMapper.airportToDto(airport);
+        // cache miatt ehelyett újat írunk: (ID-ra muxik csak a cache) return airportMapper.airportToDto(airport);
 
+        return airportMapper.airportSummaryToDto(airport);
     }
 
 
